@@ -6,21 +6,16 @@
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="./public/style.css" />
     <link rel="stylesheet" href="./public/custom.css" />
+    
   </head>
-  <body class="bg-my-image text-white">
+  <body class="bg-my-image ">
     <h1
       class="text-5xl text-center m-5 p-5 backdrop-filter  text-gray-100 font-bold text-shadow"
     >
       Weather Dashboard
     </h1>
 
-    <button
-      data-drawer-target="default-sidebar"
-      data-drawer-toggle="default-sidebar"
-      aria-controls="default-sidebar"
-      type="button"
-      class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-    >
+    <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
       <span class="sr-only">Open sidebar</span>
       <svg
         class="w-6 h-6"
@@ -43,15 +38,16 @@
       aria-label="Sidebar"
     >
       <div class="h-full mx-3 px-3 py-4 overflow-y-auto dark:bg-gray-800">
-        <p class="text-2xl font-bold">Search for a City:</p>
+        <p class="text-2xl font-bold text-white">Search for a City:</p>
         <input
-          class="w-full mb-5 mt-4 border-solid border-2 border-gray-500 rounded-md py-2 px-3 text-xl"
+          class="w-full mb-5 mt-4 border-solid border-2 border-gray-500 rounded-md py-2 px-3 text-xl text-black"
           type="text"
           placeholder="New York"
         /><br />
         <button
+        id="searchButton"
           type="button"
-          class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+          class=" text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
         >
           Search
         </button>
@@ -76,22 +72,29 @@
       </div>
     </aside>
 
-    <main class="ml-96 mr-5">
+    <main class="ml-96 mr-5 text-white">
       <article
         class=" backdrop-filter p-4 h-72 border-solid border-2 border-gray-500 rounded-md"
       >
         <h1>Hello</h1>
+        <div id="result-content"></div>
       </article>
       <h2 class="text-white mt-6 ml-2 text-3xl">5-Day Forecast:</h2>
       <article class="mt-5 columns-5">
-        <div class="backdrop-filter p-4 h-96 w-72 border-solid border-2 border-gray-500 rounded-md"></div>
-        <div class="backdrop-filter p-4 h-96 w-72 border-solid border-2 border-gray-500 rounded-md"></div>
-        <div class="backdrop-filter p-4 h-96 w-72 border-solid border-2 border-gray-500 rounded-md"></div>
-        <div class="backdrop-filter p-4 h-96 w-72 border-solid border-2 border-gray-500 rounded-md"></div>
-        <div class="backdrop-filter p-4 h-96 w-72 border-solid border-2 border-gray-500 rounded-md"></div>
+        <div class="backdrop-filter p-4 h-96 w-64 border-solid border-2 border-gray-500 rounded-md"></div>
+        <div class="backdrop-filter p-4 h-96 w-64 border-solid border-2 border-gray-500 rounded-md"></div>
+        <div class="backdrop-filter p-4 h-96 w-64 border-solid border-2 border-gray-500 rounded-md"></div>
+        <div class="backdrop-filter p-4 h-96 w-64 border-solid border-2 border-gray-500 rounded-md"></div>
+        <div class="backdrop-filter p-4 h-96 w-64 border-solid border-2 border-gray-500 rounded-md"></div>
       </article>
     </main>
 
     <script src="./public/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+      integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
