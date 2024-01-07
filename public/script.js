@@ -1,95 +1,93 @@
-// var key= db783d03fbb7cc24ba3f3d16cf4db9ce;
+// var key= 3eb4b5f37d450dfaf2a3d0243165cb76;
 
 var searchFormEl = document.querySelector('#searchButton');
 var resultContentEl = document.querySelector('#result-content');
+var inputValue = document.querySelector('.inputValue');
+var name1 = document.querySelector('.name1');
+var temp = document.querySelector('.temp');
+var feelsLike = document.querySelector('.feelsLike');
+var description = document.querySelector('.description');
+var wind = document.querySelector('.wind');
+var humidity = document.querySelector('.humidity');
+var submit = document.querySelector('.submit');
+var date = document.querySelector('.date1');
+var img = document.querySelector('#img');
+var searchedCities = document.querySelector('.searchedCities')
+var arrayOfSearchedThings = [];
 
-function getParams() {
-    var searchParamsArr = document.location.search.split('&');
-    var query = searchParamsArr[0].split('=').pop();
-    searchApi(query);
-}
+var arrayOfSearchedThings = JSON.parse(localStorage.getItem("cities"));
+searchFormEl.addEventListener('click', function(){
+  
 
-function printResults(resultObj) {
-    console.log(resultObj);
+  fetch('https://api.openweathermap.org/data/2.5/weather?q='+inputValue.value+'&appid=3eb4b5f37d450dfaf2a3d0243165cb76&units=imperial')
+  .then(response => response.json())
+  .then(data => {
+    var nameValue = data['name'];
+    var tempValue = data['main']['temp'];
+    var feelsLikeValue = data['main']['feels_like'];
+    var descriptionValue = data['weather'][0]['description'];
+    var windValue = data['wind']['speed'];
+    var humidityValue = data['main']['humidity'];
+    var image = data['weather'][0]['icon'];
+    var link1= 'https://openweathermap.org/img/wn/'+image+'@4x.png';
+
+    name1.innerHTML = nameValue;
+    temp.innerHTML = "Temp: "+tempValue+"°F";
+    feelsLike.innerHTML = "Feels like: "+feelsLikeValue+"°F";
+    description.innerHTML = "Desciption: "+descriptionValue;
+    wind.innerHTML = "Wind: "+windValue+ "MPH";
+    humidity.innerHTML = "Humidity: "+humidityValue+" %";
+    date.innerHTML = dayjs().format("- dddd, MMMM DD, YYYY");
+    img.setAttribute('src',link1);
+  })
   
-    var resultCard = document.createElement('div');
-    resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
-  
-    var resultBody = document.createElement('div');
-    resultBody.classList.add('card-body');
-    resultCard.append(resultBody);
-  
-    var titleEl = document.createElement('h3');
-    titleEl.textContent = resultObj.title;
-  
-    var bodyContentEl = document.createElement('p');
-    bodyContentEl.innerHTML =
-      '<strong>Temp:</strong> ' + forecast.temperature.value + '<br/>';
-  
-    if (resultObj.subject) {
-      bodyContentEl.innerHTML +=
-        '<strong>Wind:</strong> ' + resultObj.subject.join(', ') + '<br/>';
+  fetch('https://api.openweathermap.org/data/2.5/forecast?q='+inputValue.value+'&appid=3eb4b5f37d450dfaf2a3d0243165cb76&units=imperial')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    
+    var day=0;
+    for(i=0;i<5;i++){
+      document.getElementById('card-temp'+(i+1)).innerHTML = "Temp: "+data['list'][day]['main']['temp']+"°F";
+      day=day+7;
     }
-    if (resultObj.description) {
-      bodyContentEl.innerHTML +=
-        '<strong>Humidity:</strong> ' + forecast.humidity.value;
-    } 
-  
-    resultBody.append(titleEl, bodyContentEl);
-  
-    resultContentEl.append(resultCard);
+    var day=0;
+    for(i=0;i<5;i++){
+      document.getElementById('card-wind'+(i+1)).innerHTML = "Wind: "+data['list'][day]['wind']['speed']+" MPH";
+      day=day+7;
+    }
+    var day=0;
+    for(i=0;i<5;i++){
+      document.getElementById('card-humidity'+(i+1)).innerHTML = "Humidity: "+data['list'][day]['main']['humidity']+" %";
+      day=day+7;
+    }
+    var day=0;
+    for(i=0;i<5;i++){
+      document.getElementById('card-description'+(i+1)).innerHTML = "Description: "+data['list'][day]['weather'][0]['description'];
+      day=day+7;
+    }
+    var day=0;
+    for(i=0;i<5;i++){
+      document.getElementById('card-img'+(i+1)).src ='https://openweathermap.org/img/wn/'+data['list'][day]['weather'][0]['icon']+'@4x.png';
+      day=day+7;
+    }
+  })
+
+  .catch(err => alert("Wrong City Name!"));
+
+  for(i=0;i<5;i++){
+    document.getElementById('card-date'+(i+1)).innerHTML = dayjs().add((i+1),'day').format('dddd, MMMM DD,YYYY');
   }
 
-
-function searchApi(query) {
-    var locQueryUrl = 'http://api.openweathermap.org/geo/1.0/direct?q={city name}&limit=1&appid=db783d03fbb7cc24ba3f3d16cf4db9ce';
-  
-    locQueryUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + query + '&limit=1&appid=db783d03fbb7cc24ba3f3d16cf4db9ce';
-  
-    fetch(locQueryUrl)
-      .then(function (response) {
-        if (!response.ok) {
-          throw response.json();
-        }
-  
-        return response.json();
-      })
-      .then(function (locRes) {
-        // write query to page so user knows what they are viewing
-        resultTextEl.textContent = locRes.search.query;
-  
-        console.log(locRes);
-  
-        if (!locRes.results.length) {
-          console.log('No results found!');
-          resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
-        } else {
-          resultContentEl.textContent = '';
-          for (var i = 0; i < locRes.results.length; i++) {
-            printResults(locRes.results[i]);
-          }
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-}
-
-function SearchSubmit(event) {
-  event.preventDefault();
-
-  var searchInputVal = document.querySelector('#search-input').value;
-  
-  if (!searchInputVal) {
-    console.error('You need a search input value!');
-    return;
-  }
-
-  var queryString = './search-results.html?q=' + searchInputVal ;
-
-  location.assign(queryString);
-}
-
-searchFormEl.addEventListener('submit', SearchSubmit);
-
-getParams();
+  arrayOfSearchedThings.push(inputValue.value.toUpperCase());
+    window.localStorage.setItem("cities", JSON.stringify(arrayOfSearchedThings));
+    arrayOfSearchedThings.forEach((element) => {
+      var cityList = document.createElement("li");
+      var links = document.createElement("a");
+      links.classList.add("flex", "items-center", "p-2", "rounded-lg", "text-white", "hover:bg-gray-100", "hover:text-black", "group");
+      links.setAttribute("href","");
+      links.textContent = element;
+      cityList.appendChild(links);
+      searchedCities.appendChild(cityList);
+    });
+});
