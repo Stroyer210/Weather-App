@@ -9,6 +9,7 @@ https://web.postman.co/workspace/My-Workspace~fbd80586-415d-46c1-8e36-9bd1039aa2
 https://openweathermap.org/weather-conditions
 https://openweathermap.org/forecast5
 https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+https://stackoverflow.com/questions/4689344/how-can-i-add-href-attribute-to-a-link-dynamically-using-javascript
 
 
 
