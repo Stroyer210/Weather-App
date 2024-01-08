@@ -1,5 +1,3 @@
-// var key= 3eb4b5f37d450dfaf2a3d0243165cb76;
-
 var searchFormEl = document.querySelector('#searchButton');
 var resultContentEl = document.querySelector('#result-content');
 var inputValue = document.querySelector('.inputValue');
@@ -12,15 +10,14 @@ var humidity = document.querySelector('.humidity');
 var submit = document.querySelector('.submit');
 var date = document.querySelector('.date1');
 var img = document.querySelector('#img');
-var searchedCities = document.querySelector('.searchedCities')
+var searchedCities = document.querySelector('.searchedCities');
+var listButtoms = document.querySelectorAll('.searchedCities li button')
 var arrayOfSearchedThings = [];
 var arrayOfCities=[];
+arrayOfSearchedThings = JSON.parse(localStorage.getItem("cities"));
 
-
-
-searchFormEl.addEventListener('click', function(){
-
-  fetch('https://api.openweathermap.org/data/2.5/weather?q='+inputValue.value+'&appid=3eb4b5f37d450dfaf2a3d0243165cb76&units=imperial')
+const weatherCity = function (city){
+  fetch('https://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=3eb4b5f37d450dfaf2a3d0243165cb76&units=imperial')
   .then(response => response.json())
   .then(data => {
     var nameValue = data['name'];
@@ -42,11 +39,9 @@ searchFormEl.addEventListener('click', function(){
     img.setAttribute('src',link1);
   })
   
-  fetch('https://api.openweathermap.org/data/2.5/forecast?q='+inputValue.value+'&appid=3eb4b5f37d450dfaf2a3d0243165cb76&units=imperial')
+  fetch('https://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=3eb4b5f37d450dfaf2a3d0243165cb76&units=imperial')
   .then(response => response.json())
   .then(data => {
-    console.log(data)
-    
     var day=0;
     for(i=0;i<5;i++){
       document.getElementById('card-temp'+(i+1)).innerHTML = "Temp: "+data['list'][day]['main']['temp']+"°F";
@@ -54,18 +49,14 @@ searchFormEl.addEventListener('click', function(){
       document.getElementById('card-humidity'+(i+1)).innerHTML = "Humidity: "+data['list'][day]['main']['humidity']+" %";
       document.getElementById('card-description'+(i+1)).innerHTML = "Description: "+data['list'][day]['weather'][0]['description'];
       document.getElementById('card-img'+(i+1)).src ='https://openweathermap.org/img/wn/'+data['list'][day]['weather'][0]['icon']+'@4x.png';
+      document.getElementById('card-date'+(i+1)).innerHTML = dayjs().add((i+1),'day').format('dddd, MMMM DD,YYYY');
       day=day+7;
     }
-    
   })
-
   .catch(err => alert("Wrong City Name!"));
-
-  for(i=0;i<5;i++){
-    document.getElementById('card-date'+(i+1)).innerHTML = dayjs().add((i+1),'day').format('dddd, MMMM DD,YYYY');
-  };
-
-  
+}
+const searchFunction = function(){
+  weatherCity(inputValue.value);
   if (arrayOfSearchedThings === null) {
     arrayOfCities.push(inputValue.value.toUpperCase());
     window.localStorage.setItem("cities", JSON.stringify(arrayOfCities));
@@ -75,9 +66,11 @@ searchFormEl.addEventListener('click', function(){
     links.textContent = inputValue.value.toUpperCase();
     cityList.appendChild(links);
     searchedCities.appendChild(cityList);
+    links.addEventListener("click", function() {
+      weatherCity(element);
+    });
   } else {
-    cityList.textContent = '';
-    arrayOfSearchedThings = JSON.parse(localStorage.getItem("cities"));
+    searchedCities.textContent ="";
     arrayOfSearchedThings.push(inputValue.value.toUpperCase());
     window.localStorage.setItem("cities", JSON.stringify(arrayOfSearchedThings));
     arrayOfSearchedThings.forEach((element) => {
@@ -87,7 +80,24 @@ searchFormEl.addEventListener('click', function(){
       links.textContent = element;
       cityList.appendChild(links);
       searchedCities.appendChild(cityList);
+      links.addEventListener("click", function() {
+        weatherCity(element);
+      });
     })}
-  })
-
-
+}
+searchFormEl.addEventListener('click', searchFunction);
+window.addEventListener("load", (event) => {
+    arrayOfSearchedThings = JSON.parse(localStorage.getItem("cities"));
+    searchedCities.textContent ="";
+    if(arrayOfSearchedThings !== null){
+      arrayOfSearchedThings.forEach((element) => {
+        var cityList = document.createElement("li");
+        var links = document.createElement("button");
+        links.classList.add("flex", "items-center", "p-2", "rounded-lg", "text-white", "hover:bg-gray-100", "hover:text-black", "group", "w-full");
+        links.textContent = element;
+        cityList.appendChild(links);
+        searchedCities.appendChild(cityList);
+        links.addEventListener("click", function() {weatherCity(element)});
+    });
+    }
+  });
