@@ -56,6 +56,7 @@ const weatherCity = function (city){
   .catch(err => alert("Wrong City Name!"));
 }
 const searchFunction = function(){
+  arrayOfSearchedThings = JSON.parse(localStorage.getItem("cities"));
   weatherCity(inputValue.value);
   if (arrayOfSearchedThings === null) {
     arrayOfCities.push(inputValue.value.toUpperCase());
