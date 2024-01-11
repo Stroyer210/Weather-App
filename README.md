@@ -1,4 +1,3 @@
-# Weather-App
 
 # Work Day Scheduler
 ![Static Badge](https://img.shields.io/badge/HTML-%23E86B20?style=for-the-badge&logo=html5&labelColor=black) ![Static Badge](https://img.shields.io/badge/CSS-%2388C8EB?style=for-the-badge&logo=css3&logoColor=%235BB4EB&labelColor=black) ![Static Badge](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&labelColor=black) ![Static Badge](https://img.shields.io/badge/tailwind%20css%20-%20%2306B6D4?style=for-the-badge&logo=tailwindcss&labelColor=black)
